@@ -95,7 +95,7 @@ CFLAGS += -Wjump-misses-init -Wstrict-prototypes -Wunsuffixed-float-constants
 # additional warnings flags for C++
 CXXFLAGS += -Wnon-virtual-dtor
 
-CXXFLAGS += -std=c++11
+CXXFLAGS += -std=c++17
 
 
 
