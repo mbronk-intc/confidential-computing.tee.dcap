@@ -240,11 +240,11 @@ ThirdParty:
 	$(MAKE) -C $(EXTERNAL_PATH)
 
 $(LIB_PATH)/libmpa_network.so: $(OBJS_NETWORK)
-	@$(CXX) $^ $(LDFLAGS_SO) -lcurl -o $@
+	@$(CXX) $^ -Wl,-soname=libmpa_network.so.1 $(LDFLAGS_SO) -lcurl -o $@
 	@echo "$@"
 
 $(LIB_PATH)/libmpa_uefi.so: $(OBJS_UEFI)
-	@$(CXX) $^ $(LDFLAGS_SO) -o $@
+	@$(CXX) $^ -Wl,-soname=libmpa_uefi.so.1 $(LDFLAGS_SO) -o $@
 	@echo "$@"
 
 $(OBJ_SGX_CAPABLE_PATH)/%.o:
