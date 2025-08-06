@@ -348,7 +348,7 @@ uefi_status_t get_platform_manifest(uint8_t ** buffer, uint32_t &out_buffer_size
         mpResult = p_mp_uefi_get_request_type(&type);
         if (mpResult == MP_SUCCESS) {
             if (type == MP_REQ_REGISTRATION) {
-                *buffer = new (std::nothrow) unsigned char[UINT32_MAX];
+                *buffer = new (std::nothrow) unsigned char[PLATFORM_MANIFEST_LENGTH];
                 mpResult = p_mp_uefi_get_request(*buffer, &out_buffer_size);
                 if (mpResult != MP_SUCCESS) {
                     printf("Error: Couldn't get the platform manifest information.\n");

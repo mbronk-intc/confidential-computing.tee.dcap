@@ -42,7 +42,7 @@
 #define ISV_SVN_LENGTH                    2
 #define PCE_ID_LENGTH                     2
 #define DEFAULT_PLATFORM_ID_LENGTH        16
-#define PLATFORM_MANIFEST_LENGTH          28221
+#define PLATFORM_MANIFEST_LENGTH          1024 * 256 // 256K
 
 /* PCE ID for the PCE in this library */
 #define PCE_ID 0
