@@ -131,7 +131,7 @@ LDFLAGS_SO := -shared -Wl,-z,relro,-z,now,-z,noexecstack
 LD_REGI_APP := -L$(LIB_PATH) -Wl,-Bstatic -lmpa_registration -Wl,-Bdynamic -lmpa_network -lmpa_uefi
 LD_MANAGE_APP := -L$(LIB_PATH) -Wl,-Bstatic -lmpa_management -lmpa_registration -Wl,-Bdynamic -lmpa_uefi
 
-LD_GTEST := -L$(GTEST_PATH)/lib -lgtest -lgmock_main -lgmock 
+LD_GTEST := -L$(GTEST_PATH)/lib -lgtest -lgmock_main -lgmock -lpthread
 
 CXX_WARNINGS := -Wall -Wextra -Winit-self -Wpointer-arith -Wreturn-type -Waddress -Wsequence-point -Wformat-security -Wmissing-include-dirs -Wfloat-equal -Wundef -Wshadow -Wcast-align -Wconversion -Wredundant-decls
 CXXFLAGS := -std=c++17 -fPIC -Wnon-virtual-dtor -fstack-protector -ffunction-sections -DITT_ARCH_IA64 -fcf-protection $(CXX_WARNINGS)
