@@ -36,9 +36,10 @@ Version:        @version@
 Release:        1%{?dist}
 Summary:        Intel(R) TD Quoting Generation Service
 Group:          Development/System
+Requires:       libsgx-tdx-logic >= %{version}-%{release}
 
 License:        BSD License
-URL:            https://github.com/intel/linux-sgx
+URL:            https://github.com/intel/SGXDataCenterAttestationPrimitives
 Source0:        %{name}-%{version}.tar.gz
 
 %description
