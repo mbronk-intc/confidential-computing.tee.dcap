@@ -54,8 +54,7 @@ OBJ_SRC_PATH := $(OBJ_PATH)/qve
 OBJS_SRC := $(OBJ_SRC_PATH)/$(notdir $(SRC_QVE_LOGIC:.cpp=.o))
 
 LD_GTEST := -L$(GTEST_PATH)/lib -lgtest -lgmock_main -lgmock
-
-LD_UT := -Wl,--no-undefined
+LDFLAGS := -L$(PREBUILD_OPENSSL_PATH)/lib/linux64 -lcrypto -lpthread
 
 CXX_WARNINGS := -Wall -Wextra -Winit-self -Wpointer-arith -Wreturn-type -Waddress -Wsequence-point -Wformat-security -Wmissing-include-dirs -Wfloat-equal -Wundef -Wshadow -Wcast-align -Wconversion -Wredundant-decls
 
@@ -88,7 +87,7 @@ clean:
 	rm -rf $(BUILD_PATH)
 
 $(BIN_PATH)/UnitTests: $(OBJS_TEST) $(OBJS_MOCK) $(OBJS_SRC)
-	$(CXX) $(INCLUDE) $(TESTS_INCLUDE) $(CXXFLAGS) $(OBJS_TEST) $(OBJS_MOCK) $(OBJS_SRC) $(LD_GTEST) -o $@
+	$(CXX) $(INCLUDE) $(TESTS_INCLUDE) $(CXXFLAGS) $(OBJS_TEST) $(OBJS_MOCK) $(OBJS_SRC) $(LD_GTEST) $(LDFLAGS) -o $@
 	@echo "$@"
 
 $(OBJ_TEST_PATH)/%.o: $(TEST_PATH)/%.cpp
