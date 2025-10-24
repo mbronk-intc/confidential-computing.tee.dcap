@@ -5,8 +5,9 @@ For Windows* OS
 -----------------
 ## Prerequisites
 - Ensure that you have the following required operating systems:
-   * Windows* Server 2016 (Long-Term Servicing Channel)
    * Windows* Server 2019 (Long-Term Servicing Channel)
+   * Windows* Server 2022 (Long-Term Servicing Channel)
+   * Windows* Server 2025 (Long-Term Servicing Channel)
 - Ensure that you have the following required hardware:
   * 3rd or 4th Generation Intel(R) Xeon(R) Scalable Processor
   * Intel(R) Xeon(R) D Processors from the 17xx and 27xx series
@@ -39,18 +40,21 @@ For Windows* OS
 **NOTE**:`sgx_dcap_dev.inf` is for Windows* Server 2016 LTSC and `sgx_dcap.inf` is for Windows* Server 2019 LTSC.
 
 ## How to install
-   Refer to the *"Installation Instructions"* section in the [Intel(R) Software Guard Extensions: Data Center Attestation Primitives Installation Guide For Windows* OS](https://download.01.org/intel-sgx/sgx-dcap/1.23/windows/docs/Intel_SGX_DCAP_Windows_SW_Installation_Guide.pdf) to install the right packages on your platform.
+   Refer to the *"Installation Instructions"* section in the [Intel(R) Software Guard Extensions: Data Center Attestation Primitives Installation Guide For Windows* OS](https://download.01.org/intel-sgx/sgx-dcap/1.24/windows/docs/Intel_SGX_DCAP_Windows_SW_Installation_Guide.pdf) to install the right packages on your platform.
 
 
 For Linux* OS
 -----------------
 ## Prerequisites
 - Ensure that you have the following required operating systems:
-  * Ubuntu* 18.04 LTS Desktop 64bits
-  * Ubuntu* 18.04 LTS Server 64bits
-  * Ubuntu* 20.04 LTS Server 64bits
-  * Red Hat Enterprise Linux Server release 8.5 64bits
-  * CentOS Stream 8 64bits
+  * Ubuntu* 22.04 LTS Server 64bits
+  * Ubuntu* 24.04 LTS Server 64bits
+  * Red Hat Enterprise Linux Server release 9.4 64bits
+  * CentOS Stream 9 64bits
+  * Anolis 8.10
+  * Azure Linux 3.0
+  * Debian 10 and 12
+  * SUSE Linux Enterprise Server (SLES) 15 SP 6.
 - Ensure that you have the following required hardware:
   * 3rd or 4th Generation Intel(R) Xeon(R) Scalable Processor
   * Intel(R) Xeon(R) D Processors from the 17xx and 27xx series
@@ -58,20 +62,16 @@ For Linux* OS
   * Intel(R) Atom(TM) Processor with **Flexible Launch Control** support*
 - Configure the system with the **SGX hardware enabled** option.
 - Use the following command(s) to install the required tools to build the Intel(R) SGX software:
-  * On Ubuntu 18.04
-  ```
-    $ sudo apt-get install build-essential wget python debhelper zip libcurl4-openssl-dev
-  ```
-  * On Ubuntu 20.04
+  * On Ubuntu 22.04 and 24.04
   ```
     $ sudo apt-get install build-essential wget python-is-python3 debhelper zip libcurl4-openssl-dev pkgconf libboost-dev libboost-system-dev libboost-thread-dev protobuf-c-compiler libprotobuf-c-dev protobuf-compiler
   ```
-  * On Red Hat Enterprise Linux 8.5
+  * On Red Hat Enterprise Linux 9.4
   ```
     $ sudo yum groupinstall 'Development Tools'
     $ sudo yum install wget python2 rpm-build zip pkgconf boost-devel protobuf-lite-devel protobuf-c-compiler protobuf-c-devel
   ```
-  * On CentOS Stream 8
+  * On CentOS Stream 9
   ```
     $ sudo dnf group install 'Development Tools'
     $ sudo dnf --enablerepo=powertools install wget python2 rpm-build zip pkgconf boost-devel protobuf-lite-devel protobuf-c-compiler protobuf-c-devel
@@ -116,17 +116,17 @@ A `README.md` is provided in the Intel(R) SGX driver package for Intel(R) SGX DC
   $ make DEBUG=1
 ```
 - To build the Intel(R) SGX DCAP Quote Generation Library and the Intel(R) SGX Default Quote Provider Library installers, enter the following command:
-  * On Ubuntu 18.04 and Ubuntu 20.04:
+  * On Ubuntu 22.04 and Ubuntu 24.04:
   ```
     $ make deb_pkg
   ```
   You can find the generated installers located under `installer/linux/deb/`.
-  **Note**: On Ubuntu 18.04 and Ubuntu 20.04, the above command also generates another debug symbol package with extension name of `.ddeb` for debug purpose.
+  **Note**: On Ubuntu 22.04 and Ubuntu 24.04, the above command also generates another debug symbol package with extension name of `.ddeb` for debug purpose.
   **Note**: The above command builds the installers with default configuration firstly and then generates the target installers. To build the installers without optimization and with full debug information kept in the libraries, enter the following command:
   ```
   $ make deb_pkg DEBUG=1
   ```
-  * On Red Hat Enterprise Linux 8.5 and CentOS Stream 8:
+  * On Red Hat Enterprise Linux 9.4 and CentOS Stream 9:
   ```
     $ make rpm_pkg
   ```
@@ -138,35 +138,35 @@ A `README.md` is provided in the Intel(R) SGX driver package for Intel(R) SGX DC
 
 ## Install the Intel(R) SGX DCAP Quote Generation Library Package
 - Install prebuilt Intel(R) SGX common loader and other prerequisites from [01.org](https://01.org/intel-software-guard-extensions/downloads)
-  * On Ubuntu 18.04 and Ubuntu 20.04:
+  * On Ubuntu 22.04 and Ubuntu 24.04:
   ```
     $ sudo dpkg -i --force-overwrite libsgx-ae-pce_*.deb libsgx-ae-qe3_*.deb libsgx-ae-id-enclave_*.deb libsgx-ae-qve_*.deb libsgx-enclave-common_*.deb libsgx-urts_*.deb
   ```
   **NOTE**: Sometimes we will split old package into smaller ones or move files between different packages. In such cases, you need to add `--force-overwrite` to overwrite existing files. If you're doing a fresh install, you can omit this option.
 
-  * On Red Hat Enterprise Linux 8.5 and CentOS Stream 8:
+  * On Red Hat Enterprise Linux 9.4 and CentOS Stream 9:
   ```
     $ sudo rpm -ivh libsgx-ae-pce*.rpm libsgx-ae-qe3*.rpm libsgx-ae-id-enclave*.rpm libsgx-ae-qve*.rpm libsgx-enclave-common*.rpm libsgx-urts*.rpm
   ```
   **NOTE**: If you're not doing a fresh install, please replace option `-i` to `-U` to avoid some conflict errors.
 
 - For production systems, package should be installed by the following command:
-  * On Ubuntu 18.04 and Ubuntu 20.04:
+  * On Ubuntu 22.04 and Ubuntu 24.04:
   ```
     $ sudo dpkg -i libsgx-dcap-ql_*.deb
   ```
-  * On Red Hat Enterprise Linux 8.5 and CentOS Stream 8:
+  * On Red Hat Enterprise Linux 9.4 and CentOS Stream 9:
   ```
     $ sudo rpm -ivh libsgx-dcap-ql*.rpm
   ```
 
 - For development systems, another two packages should be installed by the following commands:
-  * On Ubuntu 18.04 and Ubuntu 20.04:
+  * On Ubuntu 22.04 and Ubuntu 24.04:
   ```
     $ sudo dpkg -i libsgx-dcap-ql-dev_*.deb
     $ sudo dpkg -i libsgx-dcap-ql-dbgsym_*.deb
   ```
-  * On Red Hat Enterprise Linux 8.5 and CentOS Stream 8:
+  * On Red Hat Enterprise Linux 9.4 and CentOS Stream 9:
   ```
     $ sudo rpm -ivh libsgx-dcap-ql-devel*.rpm
     $ sudo rpm -ivh libsgx-dcap-ql-debuginfo*.rpm
@@ -174,24 +174,24 @@ A `README.md` is provided in the Intel(R) SGX driver package for Intel(R) SGX DC
 
 ## Install the Intel(R) SGX Default Quote Provider Library Package
 - For production systems, package should be installed by the following commands:
-  * On Ubuntu 18.04 and Ubuntu 20.04:
+  * On Ubuntu 22.04 and Ubuntu 24.04:
   ```
     $ sudo dpkg -i libsgx-dcap-default-qpl_*.deb
     $ sudo dpkg -i sgx-dcap-pccs_*.deb
   ```
-  * On Red Hat Enterprise Linux 8.5 and CentOS Stream 8:
+  * On Red Hat Enterprise Linux 9.4 and CentOS Stream 9:
   ```
     $ sudo rpm -ivh libsgx-dcap-default-qpl*.rpm
     $ sudo rpm -ivh sgx-dcap-pccs*.rpm
   ```
   Please refer to /opt/intel/sgx-dcap-pccs/README.md for more details about the installation of sgx-dcap-pccs.
 - For development systems, another two packages should be installed by the following commands:
-  * On Ubuntu 18.04 and Ubuntu 20.04:
+  * On Ubuntu 22.04 and Ubuntu 24.04:
   ```
     $ sudo dpkg -i libsgx-dcap-default-qpl-dev*.deb libsgx-headers*.deb
     $ sudo dpkg -i libsgx-dcap-default-qpl-dbgsym*.deb
   ```
-  * On Red Hat Enterprise Linux 8.5 and CentOS Stream 8:
+  * On Red Hat Enterprise Linux 9.4 and CentOS Stream 9:
   ```
     $ sudo rpm -ivh libsgx-dcap-default-qpl-devel*.rpm libsgx-headers*.rpm
     $ sudo rpm -ivh libsgx-dcap-default-qpl-debuginfo*.rpm
