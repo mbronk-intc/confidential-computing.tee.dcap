@@ -151,9 +151,9 @@ quote3_error_t qve_get_collateral_dates(const json::EnclaveIdentity &enclaveIden
                                                time_t* p_qe_iden_earliest_expiration_date);
 
 
-time_t getEarliestIssueDate(const CertificateChain* chain);
-time_t getLatestIssueDate(const CertificateChain* chain);
-time_t getEarliestExpirationDate(const CertificateChain* chain);
+time_t getEarliestIssueDate(const CertificateChain* chain, const json::EnclaveIdentity &enclaveIdentity);
+time_t getLatestIssueDate(const CertificateChain* chain, const json::EnclaveIdentity &enclaveIdentity);
+time_t getEarliestExpirationDate(const CertificateChain* chain, const json::EnclaveIdentity &enclaveIdentity);
 
 quote3_error_t deserializeVerCollatInfo(const std::vector<uint8_t> &bytes, verification_collateral_info_t &info);
 

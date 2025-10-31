@@ -6,28 +6,46 @@
 #include "qve_logic.h"
 
 
-time_t getEarliestIssueDate(const CertificateChain* chain) {
+time_t getEarliestIssueDate(const CertificateChain* chain, const json::EnclaveIdentity &enclaveIdentity) {
     auto certs = chain->getCerts();
     auto comp_certs_issue_date = [](const std::shared_ptr<const Certificate> &ca, const std::shared_ptr<const Certificate> &cb) {
             return ca->getValidity().getNotBeforeTime() < cb->getValidity().getNotBeforeTime();
     };
-    return (certs.empty()) ? time_t{0} : (*std::min_element(certs.begin(), certs.end(), comp_certs_issue_date))->getValidity().getNotBeforeTime();
+    if (certs.empty()) {
+        return enclaveIdentity.getIssueDate();
+    } else {
+        time_t earliest_chain_issue_date = (*std::min_element(certs.begin(), certs.end(), comp_certs_issue_date))->getValidity().getNotBeforeTime();
+        return (enclaveIdentity.getIssueDate() < earliest_chain_issue_date) ?
+               enclaveIdentity.getIssueDate() : earliest_chain_issue_date;
+    }
 }
 
-time_t getLatestIssueDate(const CertificateChain* chain) {
+time_t getLatestIssueDate(const CertificateChain* chain, const json::EnclaveIdentity &enclaveIdentity) {
     auto certs = chain->getCerts();
     auto comp_certs_issue_date = [](const std::shared_ptr<const Certificate> &ca, const std::shared_ptr<const Certificate> &cb) {
         return ca->getValidity().getNotBeforeTime() < cb->getValidity().getNotBeforeTime();
     };
-    return (certs.empty()) ? time_t{0} : (*std::max_element(certs.begin(), certs.end(), comp_certs_issue_date))->getValidity().getNotBeforeTime();
+    if (certs.empty()) {
+        return enclaveIdentity.getIssueDate();
+    } else {
+        time_t latest_chain_issue_date = (*std::max_element(certs.begin(), certs.end(), comp_certs_issue_date))->getValidity().getNotBeforeTime();
+        return (enclaveIdentity.getIssueDate() > latest_chain_issue_date) ?
+               enclaveIdentity.getIssueDate() : latest_chain_issue_date;
+    }
 }
 
-time_t getEarliestExpirationDate(const CertificateChain* chain) {
+time_t getEarliestExpirationDate(const CertificateChain* chain, const json::EnclaveIdentity &enclaveIdentity) {
     auto certs = chain->getCerts();
     auto comp_certs_exp_date = [](const std::shared_ptr<const Certificate> &ca, const std::shared_ptr<const Certificate> &cb) {
                 return ca->getValidity().getNotAfterTime() < cb->getValidity().getNotAfterTime();
     };
-    return (certs.empty()) ? time_t{0} : (*std::min_element(certs.begin(), certs.end(), comp_certs_exp_date))->getValidity().getNotAfterTime();
+    if (certs.empty()) {
+        return enclaveIdentity.getNextUpdate();
+    } else {
+        time_t earliest_chain_exp_date = (*std::min_element(certs.begin(), certs.end(), comp_certs_exp_date))->getValidity().getNotAfterTime();
+        return (enclaveIdentity.getNextUpdate() < earliest_chain_exp_date) ?
+               enclaveIdentity.getNextUpdate() : earliest_chain_exp_date;
+    }
 }
 
 quote3_error_t qve_get_collateral_dates(const json::EnclaveIdentity &enclaveIdentity,
@@ -65,12 +83,9 @@ quote3_error_t qve_get_collateral_dates(const json::EnclaveIdentity &enclaveIden
     if (version != 2 && version != 3)
         return SGX_QL_TCBINFO_UNSUPPORTED_FORMAT;
 
-    *p_qe_iden_earliest_issue_date = getEarliestIssueDate(&qe_identity_issuer_chain);
-    *p_qe_iden_latest_issue_date = getLatestIssueDate(&qe_identity_issuer_chain);
-    *p_qe_iden_earliest_expiration_date = getEarliestExpirationDate(&qe_identity_issuer_chain);
-
-    if (*p_qe_iden_earliest_issue_date == 0 || *p_qe_iden_latest_issue_date == 0 || *p_qe_iden_earliest_expiration_date == 0)
-        return SGX_QL_ERROR_UNEXPECTED;
+    *p_qe_iden_earliest_issue_date = getEarliestIssueDate(&qe_identity_issuer_chain, enclaveIdentity);
+    *p_qe_iden_latest_issue_date = getLatestIssueDate(&qe_identity_issuer_chain, enclaveIdentity);
+    *p_qe_iden_earliest_expiration_date = getEarliestExpirationDate(&qe_identity_issuer_chain, enclaveIdentity);
 
     return SGX_QL_SUCCESS;
 }

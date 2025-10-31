@@ -924,9 +924,9 @@ static quote3_error_t qve_set_quote_supplemental_data(const Quote &quote,
 
         //version should be set in wrapper functions
         //
-        supplemental_data->earliest_issue_date = verCollatInfo.issue_date_min;
-        supplemental_data->latest_issue_date = verCollatInfo.issue_date_max;
-        supplemental_data->earliest_expiration_date = verCollatInfo.expiration_date_min;
+        supplemental_data->earliest_issue_date = (verCollatInfo.issue_date_min < qe_iden_earliest_issue_date) ? verCollatInfo.issue_date_min : qe_iden_earliest_issue_date;
+        supplemental_data->latest_issue_date = (verCollatInfo.issue_date_max > qe_iden_latest_issue_date) ? verCollatInfo.issue_date_max : qe_iden_latest_issue_date;
+        supplemental_data->earliest_expiration_date = (verCollatInfo.expiration_date_min < qe_iden_earliest_expiration_date) ? verCollatInfo.expiration_date_min : qe_iden_earliest_expiration_date;
         supplemental_data->qe_iden_earliest_issue_date = qe_iden_earliest_issue_date;
         supplemental_data->qe_iden_latest_issue_date = qe_iden_latest_issue_date;
         supplemental_data->qe_iden_earliest_expiration_date = qe_iden_earliest_expiration_date;
