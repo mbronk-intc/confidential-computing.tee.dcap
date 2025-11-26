@@ -39,7 +39,7 @@ jobs:
           build-mode: none
           sarif-name: python
         - language: rust  # Rust bindings
-          build-mode: none
+          build-mode: autobuild
           sarif-name: rust
         # CodeQL supports the following values keywords for 'language': 'actions', 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'rust', 'swift'
     steps:
