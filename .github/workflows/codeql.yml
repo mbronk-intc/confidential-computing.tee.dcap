@@ -104,7 +104,7 @@ jobs:
     - name: Convert the results into a HTML report
       if: ${{ vars.RUNNER_CODE_QL != '' }}
       run: |
-        sudo apt-get install -y --no-install-recommends python3-pip 
+        sudo -E apt-get update && sudo -E apt-get install -y --no-install-recommends python3-pip 
         pip3 install sarif-tools
         ~/.local/bin/sarif html sarif-results/${{ matrix.sarif-name }}.sarif --output sarif-results/codeQL_report_${{ matrix.language }}.html        
 
@@ -140,3 +140,4 @@ jobs:
         with:
           name: sarif-result
           path: combined-artifacts
+          
