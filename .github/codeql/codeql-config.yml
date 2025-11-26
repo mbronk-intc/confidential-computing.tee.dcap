@@ -4,3 +4,4 @@ paths-ignore:
   - QuoteVerification/QuoteVerificationService
   - QuoteVerification/QVL
   - QuoteVerification/sgxssl
+threat-models: local
