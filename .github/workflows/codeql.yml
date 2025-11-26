@@ -15,9 +15,11 @@ jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
     runs-on: ${{ vars.RUNNER_CODE_QL || 'ubuntu-22.04' }}
+    # runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
     timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
     permissions:
-      security-events: write  # For uploading SARIF results to code scanning API
+      security-events: write  # For uploading SARIF results to code scanning API      
+      packages: read # required to fetch internal or private CodeQL packs
       actions: read   # For telemetry/status reporting
       contents: read
       pull-requests: read
