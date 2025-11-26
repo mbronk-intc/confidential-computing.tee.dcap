@@ -102,7 +102,6 @@ jobs:
     #       command: 'transform sarif-results/${{ matrix.sarif-name }}.sarif --format html --output sarif-results/codeQL_report_${{ matrix.language }}.html'
 
     - name: Convert the results into a HTML report
-      if: ${{ vars.RUNNER_CODE_QL != '' }}
       run: |
         sudo -E apt-get update && sudo -E apt-get install -y --no-install-recommends python3-pip 
         pip3 install sarif-tools
@@ -110,10 +109,10 @@ jobs:
 
     - name: Upload artifacts if run locally
       uses: actions/upload-artifact@v5
-      if: ${{ vars.RUNNER_CODE_QL != '' }}
       with:
         name: codeQL_sarif_results_${{ matrix.language }}
-        path: sarif-results/**    
+        path: sarif-results/**
+        retention-days: 0
     
     - name: Upload SARIF
       if: ${{ vars.RUNNER_CODE_QL == '' }}
@@ -125,7 +124,7 @@ jobs:
     name: Upload results    
     runs-on: ${{ vars.RUNNER_CODE_QL }}
     needs: analyze
-    if: (success() || failure()) && ${{ vars.RUNNER_CODE_QL != '' }}
+    if: success() || failure()
     permissions:
       contents: write
 
