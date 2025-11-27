@@ -4,4 +4,6 @@ paths-ignore:
   - QuoteVerification/QuoteVerificationService
   - QuoteVerification/QVL
   - QuoteVerification/sgxssl
+  - '**/gen_source.py'
+  - '**/Installer_VersionSync*.py'
 threat-models: local
