@@ -1,9 +1,9 @@
 name: "CodeQL config"
 paths-ignore:
-  - external
-  - QuoteVerification/QuoteVerificationService
-  - QuoteVerification/QVL
-  - QuoteVerification/sgxssl
+  - 'external/**/*'
+  - 'prebuilt/**/*'
+  - 'sgxsdk/include/**/*'
+  - 'QuoteVerification/sgxssl/**/*'
   - '**/gen_source.py'
   - '**/Installer_VersionSync*.py'
 threat-models: local
