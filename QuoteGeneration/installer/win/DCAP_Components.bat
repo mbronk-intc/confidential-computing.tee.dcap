@@ -1,3 +1,9 @@
+@REM
+@REM Copyright(c) 2011-2025 Intel Corporation
+@REM
+@REM SPDX-License-Identifier: BSD-3-Clause
+@REM
+
 echo
 
 set TOPFOLDER="..\..\..\"
