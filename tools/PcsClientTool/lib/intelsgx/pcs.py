@@ -10,7 +10,7 @@ from platform import system
 from lib.intelsgx.credential import Credentials
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
-from pkg_resources import parse_version
+from packaging.version import Version as parse_version
 
 certBegin= '-----BEGIN CERTIFICATE-----'
 certEnd= '-----END CERTIFICATE-----'
