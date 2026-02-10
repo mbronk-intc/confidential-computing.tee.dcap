@@ -40,7 +40,7 @@ jobs:
         else
           echo "PAT token available, using last successful build from branch: $SDK_SOURCE_BRANCH"
           echo "## Intel(R) SGX SDK Source: Last Successful CI Build (non production worthy)" >> ${GITHUB_STEP_SUMMARY}
-          echo "Using Intel SGX SDK, preferring last successful build on branch: \`${SDK_SOURCE_BRANCH}\`\n_(fallback 1: last successful build on main branch; fallback 2: last official release)_" >> ${GITHUB_STEP_SUMMARY}
+          echo -e "Using Intel SGX SDK, preferring last successful build on branch: \`${SDK_SOURCE_BRANCH}\`\n_(fallback 1: last successful build on main branch; fallback 2: last official release)_" >> ${GITHUB_STEP_SUMMARY}
 
           echo "source=last_successful_ci_build" >> ${GITHUB_OUTPUT}
           echo "branch=$SDK_SOURCE_BRANCH" >> ${GITHUB_OUTPUT} #note this is a preference only. May fall back to 1) main branch, 2) official release if build artifacts are n/a
@@ -163,8 +163,8 @@ jobs:
       shell: bash
       run: |
         set -xeuo pipefail
-        sudo -E apt-get update
-        sudo -E apt-get install -y --no-install-recommends \
+        sudo -E apt-get update -o Acquire::Retries=3 -o Acquire::http::Timeout=15 -o Acquire::https::Timeout=15
+        sudo -E apt-get install -o Acquire::Retries=3 -o Acquire::http::Timeout=15 -o Acquire::https::Timeout=15 -y --no-install-recommends \
           libcurl4-openssl-dev \
           libboost-dev \
           libboost-system-dev \
@@ -203,20 +203,20 @@ jobs:
 
     - name: Install SGX SDK
       run: |
-        SDK_FILE=$(ls sgx_linux_x64_sdk_*.bin)
-        echo "#### Installing SDK from file: $SDK_FILE" | tee $GITHUB_STEP_SUMMARY
+        SDK_FILE=$(ls sgx_linux_x64_sdk_*.bin)  # Note: this can technically yield >1 file, causing subsequent commands to fail, but download steps above ensure only 1 is ever present.
+        echo "SGX SDK installer file name: \`${SDK_FILE}\`" | tee -a ${GITHUB_STEP_SUMMARY}
 
         chmod +x "$SDK_FILE"
         ./"$SDK_FILE" <<< "yes"
 
         # Convenience only - if the CI-downloaded SDK had provenance disclaimer, add it to the build summary
         if [ -f "DISCLAIMER.txt" ]; then  # Add SDK provenance info
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "#### DISCLAIMER (SGX SDK source)" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          cat DISCLAIMER.txt >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> ${GITHUB_STEP_SUMMARY}
+          echo "#### DISCLAIMER (SGX SDK provenance)" >> ${GITHUB_STEP_SUMMARY}
+          echo "\`\`\`" >> ${GITHUB_STEP_SUMMARY}
+          cat DISCLAIMER.txt >> ${GITHUB_STEP_SUMMARY}
+          echo "\`\`\`" >> ${GITHUB_STEP_SUMMARY}
         fi
 
-    - name: Build (`make all`)
+    - name: Build (make all)
       run: source ./sgxsdk/environment; make all
